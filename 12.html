@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>OVERLOAD CRASH V2</title>
+<style>
+:root{
+  --bg:#090014;
+  --neon:#d175ff;
+  --purple:#c362ff;
+  --muted:#cfc6ff;
+}
+html,body{
+  height:100%;margin:0;
+  font-family:Poppins,Segoe UI,sans-serif;
+  background:var(--bg);
+  color:#fff;
+}
+body::before{
+  content:"";position:fixed;inset:0;
+  background:linear-gradient(135deg,#300050,#100018);
+  filter:brightness(1);
+  z-index:-1;
+}
+.container{display:flex;align-items:center;justify-content:center;height:100vh}
+.card{
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;
+  padding:40px;
+  width:380px;
+  box-shadow:0 0 25px var(--purple);
+  text-align:center;
+  animation:fadeIn .8s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.avatar{
+  width:120px;height:120px;border-radius:50%;
+  background:black;
+  margin:0 auto 20px;
+  border:4px solid var(--purple);
+  box-shadow:0 0 25px var(--purple);
+}
+input{
+  width:100%;padding:10px;margin:6px 0;
+  border:none;border-radius:10px;
+  background:rgba(255,255,255,0.1);
+  color:#fff;font-size:14px;outline:none;
+}
+button{
+  background:linear-gradient(90deg,var(--neon),var(--purple));
+  border:none;color:#fff;
+  padding:12px;width:100%;
+  border-radius:10px;cursor:pointer;
+  font-weight:700;font-size:14px;
+  margin-top:10px;box-shadow:0 0 15px var(--purple);
+  transition:0.3s;
+}
+button:hover{box-shadow:0 0 25px var(--purple)}
+.hidden{display:none}
+
+/* Dashboard */
+.dashboard{display:flex;flex-direction:column;align-items:center}
+.topbar{
+  display:flex;justify-content:space-between;
+  width:100%;max-width:400px;margin-bottom:15px;
+  font-size:14px;color:var(--muted);
+}
+.centername{
+  font-size:18px;
+  font-weight:700;
+  color:var(--purple);
+  margin-bottom:10px;
+  text-shadow:0 0 10px var(--purple);
+}
+input.phone{width:100%;max-width:380px}
+.options{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:15px}
+.opt{
+  background:rgba(255,255,255,0.08);
+  border:1px solid var(--purple);
+  border-radius:10px;
+  padding:10px 15px;
+  cursor:pointer;
+  transition:0.3s;
+  color:#fff;
+  font-weight:600;
+  font-size:14px;
+}
+.opt:hover,.opt.active{
+  background:var(--purple);
+  color:#000;
+  box-shadow:0 0 15px var(--purple);
+}
+#execute{
+  margin-top:20px;
+  background:linear-gradient(90deg,var(--purple),var(--neon));
+  box-shadow:0 0 20px var(--neon);
+}
+.log{
+  background:rgba(0,0,0,0.4);
+  border-radius:10px;
+  margin-top:15px;
+  padding:10px;
+  width:100%;
+  max-width:400px;
+  height:120px;
+  overflow:auto;
+  font-size:13px;
+  color:var(--muted);
+  font-family:monospace;
+  text-align:left;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="container" id="loginPage">
+  <div class="card">
+    <div class="avatar"></div>
+    <h2>OVERLOAD CRASH V2</h2>
+    <input type="text" id="user" placeholder="USN" value="LangNotdev">
+    <input type="password" id="pass" placeholder="PW" value="Dev Overload">
+    <button onclick="login()">ENTER SYSTEM ⚡</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="container hidden" id="dashboard">
+  <div class="card dashboard">
+    <div class="avatar"></div>
+    <div class="topbar">
+      <div>Developer</div>
+      <div>Exp: ∞</div>
+    </div>
+    <div class="centername">LangNotdev</div>
+
+    <input type="text" id="phone" class="phone" value="+62" placeholder="Masukkan nomor target">
+
+    <div class="options" id="options">
+      <div class="opt">CRASH ANDRO</div>
+      <div class="opt">CRASH IOS</div>
+      <div class="opt">DELAY OVERLOAD</div>
+      <div class="opt">OVERLOAD IS BACK</div>
+      <div class="opt">BLANK OVERLOAD</div>
+      <div class="opt">BULDOZERR OVERLOAD</div>
+    </div>
+
+    <button id="execute">SENDING BUG 🦠</button>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<script>
+function login(){
+  const u=document.getElementById('user').value.trim();
+  const p=document.getElementById('pass').value.trim();
+  if(u==="LangNotdev" && p==="Dev Overload"){
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+  }else{
+    alert("Username atau Password salah!");
+  }
+}
+
+// Pilih mode
+const opts=document.querySelectorAll('.opt');
+opts.forEach(o=>o.onclick=()=>{opts.forEach(x=>x.classList.remove('active'));o.classList.add('active');});
+
+// Proses sending dengan step log
+document.getElementById('execute').onclick = () => {
+  const active = document.querySelector('.opt.active');
+  const phone = document.getElementById('phone').value.trim();
+  const log = document.getElementById('log');
+  if (!active) { alert("Pilih salah satu mode terlebih dahulu!"); return; }
+  if (phone === "") { alert("Masukkan nomor target!"); return; }
+
+  log.innerHTML += `[PROCESS] Sending to ${phone} with mode ${active.textContent}...<br>`;
+  log.scrollTop = log.scrollHeight;
+
+  document.getElementById('execute').disabled = true;
+
+  setTimeout(() => {
+    log.innerHTML += `[PROCESS] Initializing connection...<br>`;
+    log.scrollTop = log.scrollHeight;
+  }, 800);
+
+  setTimeout(() => {
+    log.innerHTML += `[PROCESS] Preparing data packets...<br>`;
+    log.scrollTop = log.scrollHeight;
+  }, 1600);
+
+  setTimeout(() => {
+    log.innerHTML += `[PROCESS] Sending payload...<br>`;
+    log.scrollTop = log.scrollHeight;
+  }, 2400);
+
+  setTimeout(() => {
+    log.innerHTML += `[STATUS] Processing data...<br>`;
+    log.scrollTop = log.scrollHeight;
+  }, 3200);
+
+  setTimeout(() => {
+    log.innerHTML += `[SUCCESS] Sending successfully ✅<br><br>`;
+    log.scrollTop = log.scrollHeight;
+    document.getElementById('execute').disabled = false;
+  }, 4500);
+};
+</script>
+
+</body>
+</html>
